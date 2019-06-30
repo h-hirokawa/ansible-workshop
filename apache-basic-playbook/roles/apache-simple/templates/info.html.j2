@@ -1,0 +1,20 @@
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Ansible: Automation for Everyone</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      font-size: 150%;
+    }
+  </style>
+</head>
+<body>
+  <p>
+    Hostname: {{ inventory_hostname }}<br />
+    IP Address: {{ ansible_default_ipv4.address }}<br />
+    OS: {{ ansible_distribution }} {{ ansible_distribution_version }}<br />
+  </p>
+</body>
+</html>

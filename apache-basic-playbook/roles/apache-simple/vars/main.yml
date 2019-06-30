@@ -1,0 +1,8 @@
+---
+# vars file for apache-simple
+apache_packages:
+  - httpd
+  - mod_wsgi
+apache_htmls:
+  - index.html
+  - info.html
