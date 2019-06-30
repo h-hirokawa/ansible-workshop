@@ -13,7 +13,10 @@
   * [演習 5 - Role：Playbookを再利用可能する](./engine/ex5.html)
 * Ansible Tower編
   TowerのデプロイとTowerからのPlaybook実行、API経由の操作の基本を学ぶ
-  * 
+  * [演習1 - Ansible Towerのインストール](./tower/ex1.html)
+  * [演習2 - Ansible Towerのコンフィグレーション](./tower/ex2.html)
+  * [演習3 - ジョブテンプレートの作成と実行](./tower/ex3.html)
+  * [演習4 - REST APIによるTower操作](./tower/ex4.html)
 
 ## 前提
 

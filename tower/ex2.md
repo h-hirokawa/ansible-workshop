@@ -48,7 +48,7 @@
 
 認証情報は、Ansible Towerがジョブなどを実行する際に利用されます。サーバに対するジョブやインベントリー情報の同期、SCMとのプロジェクト同期を実行する際などに利用されます。
 
-[認証情報のタイプ](http://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#credential-types) はマシン(サーバログイン情報)や、SCM、AWSなどのクラウドアカウントなど様々がありますが、このワークショップでは操作対象サーバにSSHログインするためのマシン認証情報を利用します。
+[認証情報のタイプ](http://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#credential-types) はマシン(サーバログイン情報)や、SCM、AWSなどのクラウドアカウントなど様々がありますが、このワークショップでは管理対象ノードにSSHログインするためのマシン認証情報を利用します。
 
 ### Step 1:
 
@@ -65,11 +65,11 @@
 
 項目 | 値
 -----|---------------------------
-名前 | トレーニング用マシン認証情報   
+名前 | トレーニング用マシン認証情報         
 組織|Default
 認証情報タイプ|Machine
-ユーザー名| <<サーバーログインユーザー名>> 
-パスワード| <<サーバーログインパスワード>> 
+ユーザー名| <<管理対象ノードログインユーザー名>> 
+パスワード| <<管理対象ノードログインパスワード>> 
 権限昇格方法|sudo
 
 ### Step 4:
@@ -95,79 +95,108 @@ Tower自体はplaybook作成/編集機能やリポジトリのバージョン管
 
 項目 | 値
 -----|------------------------
-名前 |ワークショップ用プロジェクト
+名前 |トレーニング用プロジェクト
 組織|Default
 SCMタイプ|Git
-SCM URL| <<Gitlab上ワークショップ用リポジトリURL>> 
-SCM BRANCH| 
-SCM UPDATE OPTIONS(SCM更新オプション)
+SCM URL| <<Gitlab上トレーニング用リポジトリURL>> 
+SCM ブランチ/タグ/コミット| master 
+SCM更新オプション
 
-- [x] Clean(クリーニング) 
-- [x] Delete on Update(更新時の削除)
-- [x] Update on Launch(起動時の更新)
-
-![Defining a Project](at_project_detail.png)
+- [x] クリーニング
+- [x] 更新時の削除
+- [x] 起動時の更新
 
 ### Step 4:
 
-SAVEをクリックします。 ![Save button](at_save.png)
+「保存」をクリックします。 
 
-## Inventory(インベントリ) の作成
+## インベントリー の作成
 
-インベントリとは、Jobが実行可能なホストのコレクションです。
-インベントリはグループごとに分離され、グループ内にJobが実行されるホストが含まれることになります。
-グループはAnsible Towerでホスト名を手動で入力したり、Ansible Towerがサポートしているクラウド・プロバイダーから入手します。
-
-Inventoryは`tower-manage`コマンドを使ってAnsible Towerへインポートすることも可能で、今回のワークショップではこの方法でInventoryを追加します。
-
+Towerのインベントリー情報は先述の通りGitリポジトリなどから実施することも可能ですが、ここではEngineの時にも使ったAnsible操作対象ホストを `web` グループに参加させるインベントリーをブラウザ上から手動で作成していきましょう。
 
 ### Step 1:
 
-INVENTORIESをクリックします。
+画面左の一覧から「インベントリー」をクリックします。
 
 ### Step 2:
 
-＋ADD(＋追加)をクリック、Inventory(インベントリー)を選択します ![Add button](at_add.png)
+「+」（新規追加ボタン）をクリックし、「インベントリー」を選択します。
 
 ### Step 3:
 
-以下の値を利用して、新規Inventoryを作成します。
+以下の値を利用して、新規インベントリーを作成します。
 
 項目 | 値
 -----|--------------------------
-NAME(名前) |Ansible Workshop Inventory
-DESCRIPTION(説明)|workshop hosts
-ORGANIZATION(組織)|Default
-
-![Create an Inventory](at_inv_create.png)
+名前 |トレーニング用インベントリー
+組織|Default
 
 ### Step 4:
 
-SAVE(保存)をクリックします。 ![Save button](at_save.png)
+「保存」をクリックします。 
 
-### Step 5:
+## インベントリー内webグループ の作成
 
-SSHを利用し、Ansibleコントロールノードへログインします。
+インベントリーに `web` グループを定義します。
 
-`tower-manage`　コマンドを利用して既存のインベントリファイルをAnsible Towerへインポートします。（以下のコマンドの_<location of you inventory>_をAnsibleEngineの演習で利用していたInventoryファイルのパスへ置き換えてください。)
+### Step 1:
 
+「トレーニング用インベントリー」詳細画面上部の「グループ」タブをクリックします。
+
+### Step 2:
+
+「+」（新規追加ボタン）をクリックします。
+
+### Step 3:
+
+以下の値で、新規グループを作成します。
+
+| 項目 | 値   |
+| ---- | ---- |
+| 名前 | web  |
+
+### Step 4:
+
+「保存」をクリックします。 
+
+## webグループに node1 ホストを追加
+
+グループ内に `node1` ホストを追加します。
+
+### Step 1:
+
+「web」グループ詳細画面上部の「ホスト」タブをクリックします。
+
+### Step 2:
+
+「+」（新規追加ボタン）をクリックし、「新規ホスト」を選択
+
+### Step 3:
+
+以下の値で、新規グループを作成します。
+
+| 項目     | 値    |
+| -------- | ----- |
+| ホスト名 | node1 |
+
+**変数**(YAML):
+
+```yaml
+---
+ansible_host: <<管理対象ノードIP>>
+apache_test_message: このホストはTowerからデプロイしました
 ```
-sudo tower-manage inventory_import --source=<location of you inventory> --inventory-name="Ansible Workshop Inventory"
-```
 
-以下のような出力になるはずです:
+Note: `apache_test_message` はこの後ジョブテンプレートで設定する apache-basic-playbook でHTMLに設定するための変数です。
 
-![Importing an inventory with tower-manage](at_tm_stdout.png)
+### Step 4:
 
-Ansible Towerのインベントリを確認してみてください。
-先ほど作成したインベントリ"Ansible Workshop Inventory"内に、グループWebと、その中にノードが登録されていることが確認できるはずです。
+「保存」をクリックします。 
 
-![Inventory with Groups](at_inv_group.png)
-
-### 結果
+---
 
 ここまでで、Ansible Towerの基本的な構成を終えることができました。
-次の演習ではjob templateの作成と実行に焦点を当て、Ansible Towerがどのように機能するかを実際に見ていきます。
+次の演習ではジョブテンプレートの作成と実行に焦点を当て、Ansible Towerがどのように機能するかを実際に見ていきます。
 
 ------
 
